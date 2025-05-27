@@ -1,6 +1,6 @@
 import OBR from "@owlbear-rodeo/sdk";
 
-export function setupApprover(element) {
+export function setupApprover(element: any) {
     
     const pressApprover = () => {
         
