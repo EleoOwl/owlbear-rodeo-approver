@@ -1,38 +1,34 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
+import { ApproveSetter } from './ApproveSetter'
 
-import { setupApprover } from './approver'
+import OBR from "@owlbear-rodeo/sdk";
+
 
 function App() {
 
+    const [sceneReady, setSceneReady] = useState(false);
     useEffect(() => {
-        const approve = document.getElementById('approve-button')
 
-        const disapprove = document.getElementById('disapprove-button')
+        OBR.onReady(() => {
+            OBR.scene.isReady().then(setSceneReady);
+            return OBR.scene.onReadyChange(setSceneReady);
+        });
 
-        if (approve) {
-            setupApprover(approve)
-        }
-        if (disapprove) {
-            setupApprover(disapprove)
-        }
-    })
 
-        return (
-            <>
+        }, []);
 
-                <div className="card">
-                    <button id="approve-button">
-                        Approve
-                    </button >
-                    <button id="disapprove-button">
-                        Disapprove
-                    </button>
-
-                </div>
-
-            </>
-        )
+    if (sceneReady) {
+        return (<> <button>
+            Approve
+        </button > <ApproveSetter /></>);
+    }
+    else {
+        return (<div className="App"><button>
+            else Approve
+        </button > </div>)
     }
 
-export default App
+}
+
+export default App;
