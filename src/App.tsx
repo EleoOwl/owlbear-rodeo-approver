@@ -4,6 +4,7 @@ import { ApproveSetter } from './ApproveSetter'
 
 import OBR from "@owlbear-rodeo/sdk";
 
+import { getPluginId } from "./getPluginId";
 
 function App() {
 
@@ -14,14 +15,20 @@ function App() {
             OBR.scene.isReady().then(setSceneReady);
             return OBR.scene.onReadyChange(setSceneReady);
         });
+        OBR.onReady(() => {
 
+            OBR.player.setMetadata({
+                [getPluginId("metadata")]: {
+                    characterName: OBR.player.name,
+                    characterImageUrl: ""
+                }
+            });
+        });
 
         }, []);
 
     if (sceneReady) {
-        return (<> <button>
-            Approve
-        </button > <ApproveSetter /></>);
+        return (<> <ApproveSetter /></>);
     }
     else {
         return (<div className="App"><button>

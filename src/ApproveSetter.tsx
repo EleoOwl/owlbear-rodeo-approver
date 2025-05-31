@@ -5,6 +5,8 @@ import OBR from "@owlbear-rodeo/sdk";
 
 import addIcon from "./assets/icon.svg";
 
+import { Grid } from '@mui/material'
+
 import { getPluginId } from "./getPluginId";
 import { isPlainObject } from "./isPlainObject";
 
@@ -19,10 +21,35 @@ function isMetadata(
     );
 }
 
+
 export function ApproveSetter() {
 
     const [attachedCharacterId, setAttachedCharacterId] = useState<int>(0);
     const [attachedName, setName] = useState<string>();
+    const [attachedImageUrl, setImage] = useState<string>();
+
+    const [meta, setMeta] = useState<any>();
+
+    const [start, setStart] = useState<boolean>();
+
+    useEffect(() => {
+        if (!start) {
+            setStart(true);
+            OBR.player.getName().then(setName);
+        }
+    });
+
+    useEffect(() => {
+        if (!start) {
+            OBR.player.setMetadata({
+                [getPluginId("metadata")]: {
+                    attachedCharachterName: setName,
+                    attachedCharacterImageUrl: ""
+                }
+
+            });
+        }
+    });
 
 
     useEffect(() => {
@@ -33,49 +60,85 @@ export function ApproveSetter() {
                     label: "Set for approval",
                     filter: {
                         every: [
-                           { key: "layer", value: "CHARACTER"},
-                           // { key: "layer", value: "MOUNT" },
-                           // { key: "type", value: "IMAGE" },
-                           // { key: ["metadata", getPluginId("metadata")], value: undefined },
+                            { key: "layer", value: "CHARACTER" },
+                            // { key: "layer", value: "MOUNT" },
+                            // { key: "type", value: "IMAGE" },
+                            // { key: ["metadata", getPluginId("metadata")], value: undefined },
                         ]
                     },
                 }
             ],
             id: getPluginId("menu/toggle"),
-            onClick(context: any)
-            {
+            onClick(context: any) {
+
                 setAttachedCharacterId(context.items[0].id);
-                setName(OBR.scene.items.getItems([attachedCharacterId]).name);
+                setName(context.items[0].name);
+                setImage(context.items[0].image.url);
+
+                OBR.player.setMetadata({
+                    [getPluginId("metadata")]: {
+                        attachedCharachterName: context.items[0].name,
+                        attachedCharacterImageUrl: context.items[0].image.url
+                    }
+                });
+                OBR.player.getMetadata([getPluginId("metadata")]).then(setMeta);
+                
             },
         });
     }, []);
 
+    useEffect(() => {
+        OBR.action.setHeight(450);
+    }, []);
 
-    function showApproval(isApproved: boolean) {
-        //OBR.notification.show("Approve it");
-        try {
-            OBR.notification.show(`${attachedName} ${isApproved ? "approves." : "disapproves."}`);
+      function showApproval(isApproved: boolean) {
+
+         try {
+
+             console.log(meta);
+             OBR.notification.show(`${attachedName} ${isApproved ? "approves." : "disapproves."}`);
+
+            //OBR.popover.open({
+            //    id: getPluginId("popover"),
+            //    url: "/popover.html",
+            //    height: 80,
+            //    width: 200,
+            //    hidePaper: true,
+            //    anchorOrigin: { horizontal: "RIGHT", vertical: "BOTTOM" },
+            //    anchorPosition: { left: 200, top: 200 }
+            //});
         }
         catch (error: any) {
-            OBR.notification.show(`Error ${attachedCharacterId}l: ${error.message}`);
+            OBR.notification.show(`Error ${attachedCharacterId}: ${error.message}`);
         };
-        
+
     };
+
 
     return (
         <>
-
-            <div className="card">
-                
-                {attachedName}
-                
-                <button onClick={() => showApproval(true)}>
-                    Approve
-                </button >
-                <button onClick={() => showApproval(false)}>
-                    Disapprove
-                </button>
-
+            <div>
+                <Grid container spacing={2}>
+                    <Grid size={12}>
+                        <img width="200" height="200" src={attachedImageUrl} />
+                    </Grid>
+                    <Grid size={12}>
+                        <font size="20"> {attachedName} </font>
+                    </Grid>
+                    <Grid size={12}>
+                        <font size="20"> {meta?.attachedCharachterName} </font>
+                    </Grid>
+                    <Grid size={6}>
+                        <button onClick={async () => showApproval(true)}>
+                            Approve
+                        </button >
+                    </Grid>
+                    <Grid size={6}>
+                        <button onClick={async () => showApproval(false)}>
+                            Disapprove
+                        </button>
+                    </Grid>
+                </Grid>
             </div>
 
         </>
