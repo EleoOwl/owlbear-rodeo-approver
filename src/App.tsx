@@ -24,6 +24,19 @@ function App() {
                 }
             });
         });
+        OBR.onReady(() => {
+
+            OBR.popover.open({
+                id: getPluginId("popover"),
+                url: "/popover.html",
+                height: 500,
+                width: 800,
+                hidePaper: true,
+                anchorOrigin: { horizontal: "RIGHT", vertical: "BOTTOM" },
+                anchorPosition: { left: 200, top: 200 },
+                disableClickAway: true
+            });
+        });
 
         }, []);
 

@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
+import {ApprovePopupWindow} from "./ApprovePopupWindow"
+
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-         <button>
-                    Approve
-                </button >
+    <React.StrictMode>
+        <ApprovePopupWindow/>
   </React.StrictMode>
 );
