@@ -17,15 +17,6 @@ function App() {
         });
         OBR.onReady(() => {
 
-            OBR.player.setMetadata({
-                [getPluginId("metadata")]: {
-                    characterName: OBR.player.name,
-                    characterImageUrl: ""
-                }
-            });
-        });
-        OBR.onReady(() => {
-
             OBR.popover.open({
                 id: getPluginId("popover"),
                 url: "/popover.html",
