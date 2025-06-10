@@ -29,11 +29,11 @@ function App() {
             OBR.popover.open({
                 id: getPluginId("popover"),
                 url: "/popover.html",
-                height: 500,
-                width: 800,
+                height: 150,
+                width: 400,
                 hidePaper: true,
                 anchorOrigin: { horizontal: "RIGHT", vertical: "BOTTOM" },
-                anchorPosition: { left: 200, top: 200 },
+                anchorPosition: { left: 0, top: 0 },
                 disableClickAway: true
             });
         });

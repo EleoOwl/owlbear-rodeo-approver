@@ -1,6 +1,5 @@
-﻿import { useEffect, useState, useRef } from 'react'
+﻿import { useEffect, useState } from 'react'
 import './App.css'
-import { ApproveSetter } from './ApproveSetter'
 
 import OBR from "@owlbear-rodeo/sdk";
 
@@ -8,7 +7,6 @@ import { getPluginId } from "./getPluginId";
 
 import type { ApproveItem } from "./ApproveItem";
 import List from "@mui/material/List";
-import Box from "@mui/material/Box";
 
 import { Guid } from 'js-guid';
 
@@ -38,6 +36,7 @@ export function ApprovePopupWindow() {
                 setTimeout(() => {
                     setApproveItems(prev => prev.slice(1));
                 }, 5000);
+
             });
         });
 
@@ -49,34 +48,52 @@ export function ApprovePopupWindow() {
                 } else {
                     console.warn("Listener was not removed because unsubscribe was undefined");
                 }
-            }, 50); 
+            }, 50);
         };
     }, []);
-    const listRef = useRef<HTMLUListElement>(null);
 
-    function resetApprovalsList() {
-        console.log("approvals reset");
-        setApproveItems([]);
-    }
+    const hidden = approveItems.length === 0;
+    useEffect(() => {
+        if (hidden) {
+            OBR.popover.setHeight(getPluginId("popover"), 0);
+            OBR.popover.setWidth(getPluginId("popover"), 0);
+        } else {
+            OBR.popover.setHeight(getPluginId("popover"), 250);
+            OBR.popover.setWidth(getPluginId("popover"), 350);
+        }
+    }, [hidden]);
 
-    function popApproveItems() {
 
-        console.log("popping");
-        setApproveItems(approveItems.slice(1));
-    }
-
-    return (<Box sx={{ overflowY: "auto" }}>
-        <List ref={listRef}>
+    return (
+        <List  sx={{
+            overflow: "visible",    
+            maxHeight: "none",       
+            height: "auto",          
+        }}
+            component="div"
+        >
             {approveItems.slice(0, 3)
                 .map((approve) => (
-                    <div key={Guid.newGuid()}>
-                        <img width="30" height="30" src={approve.approverImageUrl} />
+                    <div key={Guid.newGuid()} >
 
-                        <font size="5" vertical-align="bottom"> {approve.approverName} {approve.approved ? "одобряет" : "осуждает"} </font>
+                        <span style={{
+                            backgroundColor: approve.approved ? "rgba(0, 255, 0, 0.3)" : "rgba(255, 0, 0, 0.3)",
+                            fontSize: "18px",
+                            padding: "4px 8px",
+                            marginLeft: "10px",
+                            borderRadius: "4px",
+                            display: "inline-flex",
+                            alignItems: "center"
+                        }}>
+
+                            <img width="30" height="30" src={approve.approverImageUrl} />
+
+                            {approve.approverName} {approve.approved ? "одобряет" : "осуждает"}
+
+                        </span>
                     </div>
                 ))}
         </List>
-        <button onClick={resetApprovalsList}>Стереть</button>
-    </Box>);
+   );
 
 }

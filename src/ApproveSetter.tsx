@@ -5,6 +5,10 @@ import OBR from "@owlbear-rodeo/sdk";
 
 import { Grid } from '@mui/material'
 
+import heartBrokenIconUrl from './assets/heartbroken.svg';
+
+import heartIconUrl from './assets/heart.svg';
+
 import { getPluginId } from "./getPluginId";
 
 export const getOBR = () => {
@@ -97,11 +101,14 @@ export function ApproveSetter() {
                     </Grid>
                     <Grid size={6}>
                         <button onClick={async () => showApproval(true)}>
+                            <img src={heartIconUrl} align="center" width={20} height={20} />
                             Approve
                         </button >
                     </Grid>
                     <Grid size={6}>
+                        
                         <button onClick={async () => showApproval(false)}>
+                            <img src={heartBrokenIconUrl} align= "center" width={20} height={20} />
                             Disapprove
                         </button>
                     </Grid>
