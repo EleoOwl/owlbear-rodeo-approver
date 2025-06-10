@@ -18,7 +18,7 @@ export const getOBR = () => {
 
 export function ApproveSetter() {
 
-    const [attachedCharacterId, setAttachedCharacterId] = useState<int>(0);
+    const [attachedCharacterId, setAttachedCharacterId] = useState<number>(0);
     const [attachedName, setName] = useState<string>();
     const [attachedImageUrl, setImage] = useState<string>();
 
@@ -97,18 +97,18 @@ export function ApproveSetter() {
                         <img width="200" height="200" src={attachedImageUrl} />
                     </Grid>
                     <Grid size={12}>
-                        <font size="20"> {attachedName} </font>
+                        <span style={{ fontSize: "20px" }}> {attachedName} </span>
                     </Grid>
                     <Grid size={6}>
                         <button onClick={async () => showApproval(true)}>
-                            <img src={heartIconUrl} align="center" width={20} height={20} />
+                            <img src={heartIconUrl} style={{ verticalAlign: "middle" }} width={20} height={20} />
                             Approve
                         </button >
                     </Grid>
                     <Grid size={6}>
                         
                         <button onClick={async () => showApproval(false)}>
-                            <img src={heartBrokenIconUrl} align= "center" width={20} height={20} />
+                            <img src={heartBrokenIconUrl} style={{ verticalAlign: "middle" }} width={20} height={20} />
                             Disapprove
                         </button>
                     </Grid>

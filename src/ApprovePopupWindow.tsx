@@ -74,7 +74,7 @@ export function ApprovePopupWindow() {
         >
             {approveItems.slice(0, 3)
                 .map((approve) => (
-                    <div key={Guid.newGuid()} >
+                    <div key={Guid.newGuid().toString()} >
 
                         <span style={{
                             backgroundColor: approve.approved ? "rgba(0, 255, 0, 0.3)" : "rgba(255, 0, 0, 0.3)",
